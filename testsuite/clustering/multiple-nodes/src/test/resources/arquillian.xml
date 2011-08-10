@@ -12,8 +12,6 @@
                 <property name="serverConfig">standalone-ha.xml</property>
                 <property name="modulePath">target/jbossas-1/modules</property>
                 <property name="managementPort">19999</property>
-                <property name="jmxPort">1190</property>
-                <property name="httpPort">8180</property>
             </configuration>
         </container>
         <container qualifier="container.active-2">
@@ -25,8 +23,6 @@
                 <property name="serverConfig">standalone-ha.xml</property>
                 <property name="modulePath">target/jbossas-2/modules</property>
                 <property name="managementPort">29999</property>
-                <property name="jmxPort">1290</property>
-                <property name="httpPort">8280</property>
             </configuration>
         </container>
         <container qualifier="container.active-3">
@@ -38,8 +34,6 @@
                 <property name="serverConfig">standalone-ha.xml</property>
                 <property name="modulePath">target/jbossas-3/modules</property>
                 <property name="managementPort">39999</property>
-                <property name="jmxPort">1390</property>
-                <property name="httpPort">8380</property>
             </configuration>
         </container>
     </group>
