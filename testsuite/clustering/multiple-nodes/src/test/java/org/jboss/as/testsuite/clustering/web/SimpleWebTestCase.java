@@ -45,46 +45,77 @@ import org.junit.runner.RunWith;
 
 /**
  * Validate the <distributable/> works for multiple nodes
+ *
  * @author <a href="kpiwko@redhat.com">Karel Piwko</a>
  * @author Paul Ferraro
  */
 @RunWith(Arquillian.class)
 @RunAsClient
 public class SimpleWebTestCase {
-    @Deployment(name="dep.active-1", testable=false)
+    @Deployment(name = "dep.active-1", testable = false)
     @TargetsContainer("container.active-1")
     public static Archive<?> deploymentOn1() {
-       return Deployments.distributabeWar("1");
+        return Deployments.distributabeWar();
     }
 
-    @Deployment(name="dep.active-2", testable=false)
+    @Deployment(name = "dep.active-2", testable = false)
     @TargetsContainer("container.active-2")
     public static Archive<?> deploymentOn2() {
-       return Deployments.distributabeWar("2");
+        return Deployments.distributabeWar();
     }
 
-    @Deployment(name="dep.active-3", testable=false)
+    @Deployment(name = "dep.active-3", testable = false)
     @TargetsContainer("container.active-3")
     public static Archive<?> deploymentOn3() {
-       return Deployments.distributabeWar("3");
+        return Deployments.distributabeWar();
     }
 
     @Test
     @OperateOnDeployment("dep.active-1")
-    public void test(@ArquillianResource(SimpleServlet.class) URL contextPath) throws ClientProtocolException, IOException, URISyntaxException {
+    public void test1(@ArquillianResource URL contextPath) throws ClientProtocolException, IOException, URISyntaxException {
         DefaultHttpClient client = new DefaultHttpClient();
         try {
-            HttpResponse response = client.execute(new HttpGet(contextPath.toURI()));
+            HttpResponse response = client.execute(new HttpGet(contextPath + "/simple"));
             Assert.assertEquals(HttpServletResponse.SC_OK, response.getStatusLine().getStatusCode());
-            Assert.assertEquals(Integer.parseInt(response.getFirstHeader("value").getValue()), 1);
+            Assert.assertEquals(1, Integer.parseInt(response.getFirstHeader("value").getValue()));
             Assert.assertFalse(Boolean.valueOf(response.getFirstHeader("serialized").getValue()));
             response.getEntity().getContent().close();
 
-            response = client.execute(new HttpGet(contextPath.toURI()));
+            response = client.execute(new HttpGet(contextPath + "/simple"));
             Assert.assertEquals(HttpServletResponse.SC_OK, response.getStatusLine().getStatusCode());
-            Assert.assertEquals(Integer.parseInt(response.getFirstHeader("value").getValue()), 2);
+            Assert.assertEquals(2, Integer.parseInt(response.getFirstHeader("value").getValue()));
             // This won't be true unless we have somewhere to which to replicate
-            Assert.assertFalse(Boolean.valueOf(response.getFirstHeader("serialized").getValue()));
+            Assert.assertTrue(Boolean.valueOf(response.getFirstHeader("serialized").getValue()));
+            response.getEntity().getContent().close();
+        } finally {
+            client.getConnectionManager().shutdown();
+        }
+    }
+
+    @Test
+    @OperateOnDeployment("dep.active-2")
+    public void test2(@ArquillianResource URL contextPath) throws ClientProtocolException, IOException, URISyntaxException {
+        DefaultHttpClient client = new DefaultHttpClient();
+        try {
+            HttpResponse response = client.execute(new HttpGet(contextPath + "/simple"));
+            Assert.assertEquals(HttpServletResponse.SC_OK, response.getStatusLine().getStatusCode());
+            Assert.assertEquals(3, Integer.parseInt(response.getFirstHeader("value").getValue()));
+            // This won't be true unless we have somewhere to which to replicate
+            Assert.assertTrue(Boolean.valueOf(response.getFirstHeader("serialized").getValue()));
+            response.getEntity().getContent().close();
+        } finally {
+            client.getConnectionManager().shutdown();
+        }
+    }
+
+    @Test
+    @OperateOnDeployment("dep.active-3")
+    public void test3(@ArquillianResource URL contextPath) throws ClientProtocolException, IOException, URISyntaxException {
+        DefaultHttpClient client = new DefaultHttpClient();
+        try {
+            HttpResponse response = client.execute(new HttpGet(contextPath + "/simple"));
+            Assert.assertEquals(HttpServletResponse.SC_OK, response.getStatusLine().getStatusCode());
+            Assert.assertEquals(4, Integer.parseInt(response.getFirstHeader("value").getValue()));
             response.getEntity().getContent().close();
         } finally {
             client.getConnectionManager().shutdown();

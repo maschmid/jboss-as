@@ -32,8 +32,8 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
  */
 public class Deployments {
 
-    public static WebArchive distributabeWar(String suffix) {
-        return ShrinkWrap.create(WebArchive.class, "distributable" + suffix + ".war")
+    public static WebArchive distributabeWar() {
+        return ShrinkWrap.create(WebArchive.class, "distributable.war")
                 .addClass(SimpleServlet.class)
                 .setWebXML("distributable.war/WEB-INF/web.xml");
     }
