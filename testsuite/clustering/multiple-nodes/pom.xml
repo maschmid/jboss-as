@@ -37,6 +37,7 @@
     <name>JBoss Application Server Test Suite: Clustering Tests on Multiple Nodes</name>
 
     <properties>
+        <jboss.home>${project.basedir}/../../../build/target/jboss-as-${jboss.as.release.version}</jboss.home>
     </properties>
 
     <dependencies>
