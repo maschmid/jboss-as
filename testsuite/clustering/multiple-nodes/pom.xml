@@ -61,6 +61,7 @@
             <artifactId>arquillian-container-test-api</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- This is required in order to work with Arquillian Service Deployment -->
         <dependency>
             <groupId>org.jboss.arquillian.junit</groupId>
             <artifactId>arquillian-junit-container</artifactId>
