@@ -51,19 +51,19 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 @RunAsClient
 public class SimpleWebTestCase {
-    @Deployment(name="dep.active-1")
+    @Deployment(name="dep.active-1", testable=false)
     @TargetsContainer("container.active-1")
     public static Archive<?> deploymentOn1() {
        return Deployments.distributabeWar("1");
     }
 
-    @Deployment(name="dep.active-2")
+    @Deployment(name="dep.active-2", testable=false)
     @TargetsContainer("container.active-2")
     public static Archive<?> deploymentOn2() {
        return Deployments.distributabeWar("2");
     }
 
-    @Deployment(name="dep.active-3")
+    @Deployment(name="dep.active-3", testable=false)
     @TargetsContainer("container.active-3")
     public static Archive<?> deploymentOn3() {
        return Deployments.distributabeWar("3");
